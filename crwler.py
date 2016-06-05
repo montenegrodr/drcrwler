@@ -94,7 +94,7 @@ class Manager(object):
                 break
 
             last_nb_col = self.ds.get_last_nb_col(prov)
-            attempts = [str(n + last_nb_col) for n in range(
+            attempts = [str(n + int(last_nb_col)) for n in range(
                     1, self.conf['attempts'] + 1
             )]
             dr = None
@@ -147,17 +147,17 @@ def start_crawler(mgr):
 
     logging.info('Crawl begins here')
     while True:
-        try:
-            for p in mgr.prov_range():
+        for p in mgr.prov_range():
+            try:
                 logging.info('Starting search for provincia {}'.format(p))
                 for dr in mgr.get_next_dr(p):
                     logging.info('Found Dr. nb_col: {}'.format(dr[u'nb_col']))
                     mgr.insert(dr)
-                logging.info('No more Dr. found for provincia {}'.format(p))
-        except Exception as err:
-            logging.error('Exception: {}'.format(err))
-        finally:
-            mgr.long_wait()
+                    logging.info('No more Dr. found for provincia {}'.format(p))
+            except Exception as err:
+                logging.error('Exception: {}'.format(err))
+            finally:
+                mgr.long_wait()
 
 
 def main(args):
