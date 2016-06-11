@@ -153,7 +153,7 @@ def start_crawler(mgr):
                 for dr in mgr.get_next_dr(p):
                     logging.info('Found Dr. nb_col: {}'.format(dr[u'nb_col']))
                     mgr.insert(dr)
-                    logging.info('No more Dr. found for provincia {}'.format(p))
+                logging.info('No more Dr. found for provincia {}'.format(p))
             except Exception as err:
                 logging.error('Exception: {}'.format(err))
             finally:

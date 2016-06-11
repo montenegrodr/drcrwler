@@ -6,7 +6,7 @@
     "short_wait": 2,
     "prov0": 1,
     "provf": 52,
-    "min_req_time": 60
+    "min_req_time": 15
   },
   "database":
   {
