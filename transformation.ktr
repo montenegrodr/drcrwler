@@ -115,7 +115,7 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <filename>&#x2f;home&#x2f;robson&#x2f;Downloads&#x2f;SMX_DOCTOR-31_2.txt</filename>
+    <filename>&#x2f;media&#x2f;robson&#x2f;Data&#x2f;bases&#x2f;SMX_DOCTOR-UTF8.txt</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
@@ -127,7 +127,7 @@
     <add_filename_result>N</add_filename_result>
     <parallel>N</parallel>
     <newline_possible>N</newline_possible>
-    <encoding>windows-1250</encoding>
+    <encoding>UTF-8</encoding>
     <fields>
       <field>
         <name>id</name>

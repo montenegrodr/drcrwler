@@ -7,6 +7,7 @@ from sqlalchemy import func
 
 Base = declarative_base()
 
+
 class Doctor(Base):
     __tablename__ = 'doctors'
 
@@ -40,19 +41,17 @@ class Dataset(object):
         self.eng = self._create_eng()
         Base.metadata.bind = self.eng
         Base.metadata.create_all()
-        Session = sessionmaker(bind=self.eng)
-        self.ses = Session()
 
     def insert(self, dr):
         ses = None
         try:
             ses = self._create_session()
             ses.add(dr)
+            ses.commit()
         except Exception as err:
             raise Exception(err)
         finally:
             if ses:
-                ses.commit()
                 ses.close()
 
     def _create_eng(self):
