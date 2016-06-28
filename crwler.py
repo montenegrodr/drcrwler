@@ -125,6 +125,7 @@ class Manager(object):
                 co_provincia_cole=co_provincia_cole,
                 no_provincia_cole=dr[u'provincia_cole'],
                 no_especialidad_list=dr[u'especialidad'],
+                dt_creat_reg=datetime.datetime.utcnow(),
                 fl_estado=1,
                 no_crea_usr='CRAWLER',
                 fl_off_reg=0
