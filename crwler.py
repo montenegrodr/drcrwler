@@ -108,6 +108,7 @@ class Manager(object):
                 self.short_wait()
 
     def insert(self, dr):
+        no_nombre, no_apellido1, no_apellido2 = None, None, None
         for i, nom in enumerate(dr[u'nombre'].split()):
             if i == 0:
                 no_nombre = nom
