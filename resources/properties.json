@@ -6,7 +6,17 @@
     "short_wait": 2,
     "prov0": 1,
     "provf": 52,
-    "min_req_time": 15
+    "min_req_time": 15,
+    "nb_checks": 5,
+    "wait_check":
+    {
+      "2": 0.10,
+      "10": 0.20,
+      "30": 0.30,
+      "60": 0.20,
+      "180": 0.10,
+      "900": 0.10
+    }
   },
   "database":
   {
@@ -39,7 +49,9 @@
       "provincia_cole": "/html/body/div/div/div[2]/table/tbody/tr[3]/td[2]",
       "especialidad": "/html/body/div/div/div[2]/table/tbody/tr[4]/td[2]",
       "estado_cole": "/html/body/div/div/div[2]/table/tbody/tr[5]/td[2]",
-      "direccion": "/html/body/div/div/div[2]/table/tbody/tr[6]/td[2]"
+      "direccion": "/html/body/div/div/div[2]/table/tbody/tr[6]/td[2]",
+      "iter_nombre": "/html/body/div/div/div/form[2]/div/table/tbody/tr[{}]/td[2]",
+      "iter_co": "/html/body/div/div/div/form[2]/div/table/tbody/tr[{}]/td[1]"
 
     }
   }

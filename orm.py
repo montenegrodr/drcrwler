@@ -2,7 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import func
+from sqlalchemy import func, asc
+from sqlalchemy.orm.session import make_transient
 
 
 Base = declarative_base()
@@ -30,6 +31,7 @@ class Doctor(Base):
     dt_modi_reg = Column(DateTime)
     dt_creat_reg = Column(DateTime)
     fl_off_reg = Column(Integer)
+    dt_last_check = Column(DateTime)
 
 
 class Dataset(object):
@@ -79,3 +81,55 @@ class Dataset(object):
                 ses.close()
         return co_colegiado
 
+    def next_dr_check(self):
+        ses = None
+        try:
+            ses = self._create_session()
+            qry = ses.query(Doctor) \
+                .filter(Doctor.co_colegiado == '010100895')
+            # qry = ses.query(Doctor) \
+            #     .filter(Doctor.fl_estado == 1) \
+            #     .order_by(asc(Doctor.dt_last_check)) \
+            #     .order_by(asc(Doctor.co_colegiado))
+            dr = qry.first()
+        except Exception as err:
+            raise Exception(err)
+        finally:
+            if ses:
+                ses.close()
+        return dr
+
+    def update(self, dr):
+        ses = None
+        try:
+            ses = self._create_session()
+            ses.merge(dr)
+            ses.commit()
+        except Exception as err:
+            raise Exception(err)
+        finally:
+            if ses:
+                ses.close()
+
+    def insert_transient(self, dr, new_co_colegiado, date):
+        ses = None
+        try:
+            ses = self._create_session()
+            dr = ses.query(Doctor) \
+                .filter(Doctor.id == dr.id).first()
+            ses.expunge(dr)
+            make_transient(dr)
+            dr.dt_modi_reg = None
+            dr.no_modi_usr = None
+            dr.id = None
+            dr.fl_estado = 1
+            dr.co_colegiado = new_co_colegiado
+            dr.dt_creat_reg = date
+            dr.dt_last_check = date
+            ses.add(dr)
+            ses.commit()
+        except Exception as err:
+            raise Exception(err)
+        finally:
+            if ses:
+                ses.close()

@@ -1,30 +1,35 @@
 from __future__ import unicode_literals
 
 import logging
-import warnings
+import codecs
 import argparse
 import json
-import codecs
+import warnings
+from orm import Dataset
 from scrapper import SiteScrapper
 from scrapper import Manager
-from orm import Dataset
 
 
-def start_crawler(mgr):
+def start_checker(mgr):
 
-    logging.info('Crawl begins here')
+    logging.info('Doctor check begins here')
+    nb_doctors = mgr.get_doctors_range()
+
     while True:
-        for p in mgr.prov_range():
-            try:
-                logging.info('Starting search for provincia {}'.format(p))
-                for dr in mgr.get_next_dr(p):
-                    logging.info('Found Dr. nb_col: {}'.format(dr[u'nb_col']))
-                    mgr.insert(dr)
-                logging.info('No more Dr. found for provincia {}'.format(p))
-            except Exception as err:
-                logging.error('Exception: {}'.format(err))
-            finally:
-                mgr.long_wait()
+        try:
+            logging.info('Doctors batch: {}'.format(nb_doctors))
+            for nb_dr, dr in enumerate(mgr.next_dr_check(nb_doctors)):
+                logging.info('Checking Dr. nb_col: {} {}/{}'.format(
+                    dr.co_colegiado, nb_dr+1, nb_doctors
+                ))
+                mgr.check(dr)
+                mgr.short_wait()
+            logging.info('Batch ended. Waiting')
+            mgr.check_wait()
+        except Exception as err:
+            logging.error('Exception: {}'.format(err))
+        finally:
+            mgr.long_wait()
 
 
 def main(args):
@@ -40,7 +45,7 @@ def main(args):
     logging.info('Creating manager instance')
     mgr = Manager(ds, spr, meta['conf'])
 
-    start_crawler(mgr)
+    start_checker(mgr)
 
 
 def parse_args():
@@ -48,7 +53,8 @@ def parse_args():
     parser.add_argument('--props', default='resources/properties.json')
     return parser.parse_args()
 
-if __name__ == '__main__':
+
+if __name__=='__main__':
     warnings.simplefilter('ignore')
     logging.basicConfig(format='%(asctime)s: %(message)s', level=logging.INFO)
     main(parse_args())
