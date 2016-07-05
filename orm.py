@@ -120,7 +120,7 @@ class Dataset(object):
             ses.expunge(dr)
             make_transient(dr)
             dr.dt_modi_reg = None
-            dr.no_modi_usr = None
+            dr.no_modi_usr = 'CRAWLER'
             dr.id = None
             dr.fl_estado = 1
             dr.co_colegiado = new_co_colegiado
