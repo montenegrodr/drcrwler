@@ -3,7 +3,7 @@
   {
     "attempts": 3,
     "long_wait": 60,
-    "short_wait": 2,
+    "short_wait": 5,
     "prov0": 1,
     "provf": 52,
     "min_req_time": 15,
@@ -28,7 +28,8 @@
   "scrapper":
   {
     "browser" : "phantomjs",
-    "phantomjs": "phantomjs-2.1.1-linux-x86_64/bin/phantomjs",
+    "phantomjs1": "phantomjs1/bin/phantomjs",
+    "phantomjs2": "phantomjs2/bin/phantomjs",
     "url": "http://cgcom-interno.vuds-omc.es/RegistroMedicos/PUBBusquedaPublica_busqueda.action",
     "wait": 5,
     "elems":

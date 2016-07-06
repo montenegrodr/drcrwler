@@ -85,12 +85,12 @@ class Dataset(object):
         ses = None
         try:
             ses = self._create_session()
-            qry = ses.query(Doctor) \
-                .filter(Doctor.co_colegiado == '010100895')
             # qry = ses.query(Doctor) \
-            #     .filter(Doctor.fl_estado == 1) \
-            #     .order_by(asc(Doctor.dt_last_check)) \
-            #     .order_by(asc(Doctor.co_colegiado))
+            #     .filter(Doctor.co_colegiado == '010100895')
+            qry = ses.query(Doctor) \
+                .filter(Doctor.fl_estado == 1) \
+                .order_by(asc(Doctor.dt_last_check)) \
+                .order_by(asc(Doctor.co_colegiado))
             dr = qry.first()
         except Exception as err:
             raise Exception(err)

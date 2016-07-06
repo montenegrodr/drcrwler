@@ -8,16 +8,18 @@ import random
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 
+
 class SiteScrapper(object):
 
-    def __init__(self, meta):
+    def __init__(self, meta, phantomjs):
         self.meta = meta
         self.wait = meta['wait']
+        self.phantomjs = phantomjs
         self.driver = self._get_browser()
 
     def _get_browser(self):
         if self.meta['browser'] == 'phantomjs':
-            return webdriver.PhantomJS(self.meta['phantomjs'])
+            return webdriver.PhantomJS(self.meta[self.phantomjs])
         elif self.meta['browser'] == 'firefox':
             return webdriver.Firefox()
 
@@ -106,11 +108,11 @@ class SiteScrapper(object):
                         new_co_colegiado = cod
                         break
             except:
-                logging.info('Could not find any other register for co_colegiado = {}'
+                logging.info('[checker] Could not find any other register for co_colegiado = {}'
                              .format(co_colegiado))
 
         except Exception as err:
-            raise Exception('Error occured while `scrap_dr_by_name` to {}. '
+            raise Exception('[checker] Error occured while `scrap_dr_by_name` to {}. '
                             'Possibly Conection Problem'.format(co_colegiado))
         finally:
             self._quit()
@@ -131,14 +133,14 @@ class Manager(object):
     def check(self, dr):
         if self.spr.scrap_dr(dr.co_colegiado):
             dr.dt_last_check = datetime.datetime.utcnow()
-            logging.info('{} is still active'.format(dr.co_colegiado))
+            logging.info('[checker] {} is still active'.format(dr.co_colegiado))
             self.ds.update(dr)
         else:
             new_co_colegiado = self.spr.scrap_dr_by_name(
                 dr.co_colegiado, dr.no_nombre, dr.no_apellido1, dr.no_apellido2
             )
             if new_co_colegiado:
-                logging.info('New co_colegiado found for {}: {}'.format(
+                logging.info('[checker] New co_colegiado found for {}: {}'.format(
                     dr.co_colegiado, new_co_colegiado
                 ))
 
@@ -165,7 +167,7 @@ class Manager(object):
             while True:
                 if last_scrap and \
                                 (datetime.datetime.now() - last_scrap).seconds < self.conf['min_req_time']:
-                    logging.info('Min request time not achieved')
+                    logging.info('[crawler] Min request time not achieved')
                     self.short_wait()
                     continue
                 break
@@ -213,12 +215,12 @@ class Manager(object):
     def prov_range(self):
         return range(self.conf['prov0'], self.conf['provf'])
 
-    def long_wait(self):
-        logging.info('Long wait: {} s'.format(self.conf['long_wait']))
+    def long_wait(self, process):
+        logging.info('[{}]Long wait: {} s'.format(process, self.conf['long_wait']))
         time.sleep(self.conf['long_wait'])
 
     def short_wait(self):
-        logging.info('Short wait: {} s'.format(self.conf['short_wait']))
+        # logging.info('Short wait: {} s'.format(self.conf['short_wait']))
         time.sleep(self.conf['short_wait'])
 
     def get_doctors_range(self):
