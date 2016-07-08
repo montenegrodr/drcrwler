@@ -59,8 +59,10 @@ def main(args):
     checker.start()
     threads.append(checker)
 
-    for th in threads:
-        th.join()
+    # for th in threads:
+    #     th.join()
+    while True:
+        pass
 
 
 def parse_args():
